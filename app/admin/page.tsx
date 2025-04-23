@@ -45,7 +45,7 @@ const AdminPage = () => {
     const token = localStorage.getItem('token');
     if (!token || !userId) return;
 
-    const newRole = newRoles[userId];  // ใช้ newRole ของผู้ใช้ที่ถูกเลือก
+    const newRole = newRoles[userId]; 
 
     fetch('/api/users', {
       method: 'PUT',
