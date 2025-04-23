@@ -10,18 +10,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end(); // Method Not Allowed
   }
 
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'Missing email or password' });
+  const { id, password } = req.body;
+  if (!id || !password) return res.status(400).json({ message: 'Missing id or password' });
 
-  const user = await prisma.user.findUnique({
-    where: { email },
+  const user = await prisma.tb_ap_index_view.findFirst({
+    where: { id },
   });
+  
   if (!user) return res.status(404).json({ message: 'User not found' });
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password || '');
   if (!isPasswordValid) return res.status(401).json({ message: 'Invalid password' });
 
-  const token = generateToken(user.id, user.email, user.role);
+  const token = generateToken(user.ap_index_view_id, user.id || '', user.permission || 'user');
 
   return res.status(200).json({ token });
 }

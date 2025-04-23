@@ -5,8 +5,8 @@ declare module 'next' {
   interface NextApiRequest {
     user?: {
       userId: number;
-      email: string;
-      role: string;
+      id: string;
+      permission: string;
     };
   }
 }

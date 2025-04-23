@@ -1,19 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
 import prisma from '@/lib/prisma';
+import { title } from 'process';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).end(); 
   }
 
-  const { email, password } = req.body;
+  const { id, password, title, name, lastname, birthday, sex } = req.body;
 
-  if (!email || !password) {
+  if (!id || !password) {
     return res.status(400).json({ message: 'Missing fields' });
   }
 
-  const existingUser = await prisma.user.findUnique({ where: { email } });
+  const existingUser = await prisma.tb_ap_index_view.findFirst({ where: { id } });
 
   if (existingUser) {
     return res.status(409).json({ message: 'User already exists' });
@@ -21,10 +22,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.user.create({
+  await prisma.tb_ap_index_view.create({
     data: {
-      email,
+      id,
       password: hashedPassword,
+      title,
+      name,
+      lastname,
+      birthday: birthday ? new Date(birthday) : null,
+      sex,
+      editor_id: id,
+      permission: 'user',
+      timestamp: new Date(),
     },
   });
 

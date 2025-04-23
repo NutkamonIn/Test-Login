@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,14 +15,20 @@ export default function LoginPage() {
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ id, password }),
     });
 
     const data = await res.json();
 
     if (res.status === 200) {
-      setMessage('Login successful!');
       localStorage.setItem('token', data.token);
+      const payload = JSON.parse(atob(data.token.split('.')[1]));
+      const permission = payload.permission;
+      if (permission === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/forms');
+      }
     } else {
       setMessage(data.message);
     }
@@ -32,10 +40,10 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           className="w-full p-2 border rounded"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="ID"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
         />
         <input
           className="w-full p-2 border rounded"

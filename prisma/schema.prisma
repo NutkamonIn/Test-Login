@@ -11,6 +11,53 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  role      String   @default("ีuser")
+  role      String   @default("user")
   createdAt DateTime @default(now())
+}
+
+model tb_ap_index_view {
+  ap_index_view_id Int      @id @default(autoincrement())
+  id               String?  @db.VarChar(13)
+  password         String?  @db.VarChar(255)
+  birthday         DateTime?
+  sex              String?  @db.VarChar(10)
+  img              String?  @db.VarChar(50)
+  type             String?  @db.VarChar(50)
+  status           String?  @db.VarChar(50)
+  salary           Float?
+  title            String?  @db.VarChar(50)
+  name             String?  @db.VarChar(100)
+  lastname         String?  @db.VarChar(100)
+  position         String?  @db.VarChar(100)
+  positionnumber   String?  @db.VarChar(20)
+  specialposition  String?  @db.Text
+  subworkgroup     String?  @db.VarChar(100)
+  workgroup        String?  @db.VarChar(255)
+  workgroup_m      String?  @db.VarChar(255)
+  missiongroup     String?  @db.VarChar(255)
+  level            String?  @db.VarChar(50)
+  expert           String?  @db.VarChar(100)
+  employment_date  DateTime?
+  entry_date       DateTime?
+  specialist       String?  @db.VarChar(155)
+  check_data       Int?
+  comment          String?  @db.Text
+  permission       String?  @db.VarChar(100)
+  UUID             String?  @db.VarChar(255)
+  bot_id           String?  @db.VarChar(255)
+  line_token       String?  @db.VarChar(255)
+  group_token      String?  @db.VarChar(255)
+  scan_id          Int?
+  timestamp        DateTime @default(now()) @updatedAt
+  editor_id        String   @db.VarChar(13)
+  is_active        Boolean?
+  is_admin         Boolean?
+  is_superuser     Boolean?
+  hash_password    String?  @db.VarChar(255)
+  name_eng         String?  @db.VarChar(255)
+  reset_pass       Int?
+  last_login       DateTime?
+  passport_token   String?  @db.VarChar(255)
+
+  @@map("tb_ap_index_view")
 }
